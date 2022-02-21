@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block body %}
+    <h2>Votre sortie "{{ sortieAffichee.nom }}" </h2>
+    <div>Infos :</div>
+    <div>
+        {{ sortieAffichee.infosSortie }}
+    </div>
+{% endblock %}
+

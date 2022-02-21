@@ -30,11 +30,11 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-            /*$user->setAdministrateur();
-            $user->setEmail();
-            $user->setNom();
-            $user->setPrenom();*/
 
+            $user->setRoles(['USER_ROLE']);
+            /*
+             * TODO if form administrateur == true { $user->setRoles(['ADMIN_ROLE'])
+             */
 
             $entityManager->persist($user);
             $entityManager->flush();
