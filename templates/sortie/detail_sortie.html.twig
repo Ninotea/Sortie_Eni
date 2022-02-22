@@ -10,6 +10,7 @@
     <div>
         {{ sortieAffichee.infosSortie }}
     </div>
+    <p>Etat : Sortie {{ sortieAffichee.unEtat.libelle }}</p>
     <button><a href="{{ path('sortie_modifier',{'id' : sortieAffichee.id}) }}">Modifier</a></button>
 {% endblock %}
 

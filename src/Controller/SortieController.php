@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Etat;
 use App\Entity\Sortie;
 use App\Form\SortieType;
+use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +21,9 @@ class SortieController extends AbstractController
     /**
      * @Route("/create", name="create")
      */
-    public function create(Request $request, EntityManagerInterface $entityManager): Response
+    public function create(Request $request,
+                           EntityManagerInterface $entityManager,
+                           EtatRepository $etatRepository)
     {
         $sortie = new Sortie();
         $form = $this->createForm(SortieType::class, $sortie);
@@ -30,21 +34,16 @@ class SortieController extends AbstractController
             $button = $form->getClickedButton()->getName() ;
             switch ($button)
             {
-                case "annuler" :
-                    return $this->redirectToRoute('main_acceuil');
                 case "publier" :
-                    //TODO $sortie->setEtat activé
+                    $etat = $etatRepository->findOneBy(['libelle'=>'Ouverte']);
+                    $sortie->setUnEtat($etat);
                     $this->addFlash('success','Sortie publier !');
-
                     break;
                 case "enregistrer" :
-                    //TODO $sortie->setEtat pas activé
+                    $etat = $etatRepository->findOneBy(['libelle'=>'Créée']);
+                    $sortie->setUnEtat($etat);
                     $this->addFlash('success','Sortie enregistrée !');
                     break;
-                case "supprimer" :
-                    //TODO supprimer sortie
-                    $this->addFlash('success','Sortie supprimer !');
-                    return $this->redirectToRoute('main_acceuil');
 
             }
             $entityManager->persist($sortie);
@@ -72,11 +71,52 @@ class SortieController extends AbstractController
     /**
      * @Route("/modifier/{id}", name="modifier")
      */
-    public function modifier(int $id, SortieRepository $sortieRepository): Response
+    public function modifier(int $id,
+                             SortieRepository $sortieRepository,
+                             EntityManagerInterface $entityManager,
+                             EtatRepository $etatRepository,
+                             Request $request): Response
     {
         $sortie = $sortieRepository->find($id);
+        $form = $this->createForm(SortieType::class, $sortie);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $button = $form->getClickedButton()->getName() ;
+            switch ($button)
+            {
+                case "annuler" :
+                    $etat = $etatRepository->findOneBy(['libelle'=>'Annulée']);
+                    $sortie->setUnEtat($etat);
+                    break;
+                case "publier" :
+                    $etat = $etatRepository->findOneBy(['libelle'=>'Ouverte']);
+                    $sortie->setUnEtat($etat);
+                    $this->addFlash('success','Sortie publier !');
+                    break;
+                case "enregistrer" :
+                    $etat = $etatRepository->findOneBy(['libelle'=>'Créée']);
+                    $sortie->setUnEtat($etat);
+                    $this->addFlash('success','Sortie enregistrée !');
+                    break;
+                case "supprimer" :
+                    $this->addFlash('success','Sortie supprimer !');
+                    $entityManager->remove($sortie);
+                    return $this->redirectToRoute('main_acceuil');
+
+            }
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('sortie_detail', [
+                'id'=>$sortie->getId()
+            ]);
+        }
+
         return $this->render('sortie/modifier_sortie.html.twig',[
-            'sortieModif' => $sortie
+            'sortieForm' => $form->createView(),
+            'sortieModif'=> $sortie
         ]);
     }
 

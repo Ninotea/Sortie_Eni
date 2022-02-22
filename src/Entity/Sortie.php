@@ -42,6 +42,12 @@ class Sortie
      */
     private $infosSortie;
 
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Etat::class, inversedBy="sortie")
+     */
+    private $unEtat;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -103,6 +109,18 @@ class Sortie
     public function setInfosSortie(string $infosSortie): self
     {
         $this->infosSortie = $infosSortie;
+
+        return $this;
+    }
+
+    public function getUnEtat(): ?Etat
+    {
+        return $this->unEtat;
+    }
+
+    public function setUnEtat(?Etat $unEtat): self
+    {
+        $this->unEtat = $unEtat;
 
         return $this;
     }

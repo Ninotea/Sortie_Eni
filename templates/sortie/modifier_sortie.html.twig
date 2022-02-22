@@ -5,9 +5,24 @@ Sortie {{ sortieModif.nom }}
 {% endblock %}
 
 {% block body %}
-<h2>{{ sortieModif.nom }}</h2>
-    <div>
-        {{ sortieModif.infosSortie }}
-    </div>
+<h2>Modification de la sortie</h2>
+
+    {{ form_start(sortieForm) }}
+        {{ form_row(sortieForm.nom) }}
+        {{ form_row(sortieForm.infosSortie) }}
+        {{ form_row(sortieForm.duree) }}
+        {{ form_row(sortieForm.dateHeureDebut) }}
+        {{ form_row(sortieForm.dateLimiteInscription) }}
+    <p>Etat de la sortie :{{ sortieModif.unEtat.libelle }}</p>
+        <div class="inline">
+            {{ form_row(sortieForm.enregistrer) }}
+            {{ form_row(sortieForm.publier) }}
+            {{ form_row(sortieForm.annuler) }}
+            {{ form_row(sortieForm.supprimer) }}
+        </div>
+    {{ form_end(sortieForm) }}
+
+
+
 {% endblock %}
 
