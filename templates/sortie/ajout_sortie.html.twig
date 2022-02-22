@@ -1,16 +1,20 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<h2>Ajouter la sortie</h2>
+<h2>Ajouter une sortie</h2>
     {{ form_start(sortieForm) }}
-        {{ form_widget(sortieForm) }}
+    {% do sortieForm.supprimer.setRendered() %}
+        {{ form_row(sortieForm.nom) }}
+        {{ form_row(sortieForm.infosSortie) }}
+        {{ form_row(sortieForm.duree) }}
+        {{ form_row(sortieForm.dateHeureDebut) }}
+        {{ form_row(sortieForm.dateLimiteInscription) }}
     <div class="inline">
-        <button type="submit" value="publier">Publier la sortie</button>
-        <button type="submit" value="enregistrer">Enregistrer la sortie</button>
-        <button type="submit" value="annuler">Annuler la sortie</button>
+        {{ form_row(sortieForm.enregistrer) }}
+        {{ form_row(sortieForm.publier) }}
+        {{ form_row(sortieForm.annuler) }}
     </div>
     {{ form_end(sortieForm) }}
-
 {% endblock %}
 
 {% block title %}

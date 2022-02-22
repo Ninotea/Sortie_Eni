@@ -27,10 +27,29 @@ class SortieController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $button = $form->getClickedButton()->getName() ;
+            switch ($button)
+            {
+                case "annuler" :
+                    return $this->redirectToRoute('main_acceuil');
+                case "publier" :
+                    //TODO $sortie->setEtat activé
+                    $this->addFlash('success','Sortie publier !');
+
+                    break;
+                case "enregistrer" :
+                    //TODO $sortie->setEtat pas activé
+                    $this->addFlash('success','Sortie enregistrée !');
+                    break;
+                case "supprimer" :
+                    //TODO supprimer sortie
+                    $this->addFlash('success','Sortie supprimer !');
+                    return $this->redirectToRoute('main_acceuil');
+
+            }
             $entityManager->persist($sortie);
             $entityManager->flush();
 
-            $this->addFlash('success','Votre "Sortie" est ajoutée !');
             return $this->redirectToRoute('sortie_detail', [
                 'id'=>$sortie->getId()
             ]);
@@ -48,6 +67,16 @@ class SortieController extends AbstractController
         $sortie = $sortieRepository->find($id);
         return $this->render('sortie/detail_sortie.html.twig',[
             'sortieAffichee' => $sortie
+        ]);
+    }
+    /**
+     * @Route("/modifier/{id}", name="modifier")
+     */
+    public function modifier(int $id, SortieRepository $sortieRepository): Response
+    {
+        $sortie = $sortieRepository->find($id);
+        return $this->render('sortie/modifier_sortie.html.twig',[
+            'sortieModif' => $sortie
         ]);
     }
 

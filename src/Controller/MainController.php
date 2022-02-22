@@ -13,6 +13,27 @@ class MainController extends AbstractController
      */
     public function index(): Response
     {
-        return $this->render('main/index.html.twig', []);
+        return $this->render('main/index.html.twig');
+    }
+    /**
+     * @Route("/profil", name="main_profil")
+     */
+    public function profil(): Response
+    {
+        return $this->render('participant/profil.html.twig');
+    }
+    /**
+     * @Route("/ville", name="main_ville")
+     */
+    public function ville(): Response
+    {
+        return $this->render('administration/ville.html.twig');
+    }
+    /**
+     * @Route("/campus", name="main_campus")
+     */
+    public function campus(): Response
+    {
+        return $this->render('administration/campus.html.twig');
     }
 }
