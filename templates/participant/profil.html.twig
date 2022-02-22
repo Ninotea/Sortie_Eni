@@ -1,7 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    Profil
+
+    <p>Nom : {{ app.user.nom }}</p>
+    <p>Prénom : {{ app.user.prenom }}</p>
+    <p>E-mail : {{ app.user.email }}</p>
+    <p>telephone : {{ app.user.telephone }}</p>
+    <!--<p>campus : {{ app.user.campus }}</p>-->
+
+    <button><a href="modificationProfil.html.twig">Modifier</button>
+
 {% endblock %}
 
 {% block title %}
