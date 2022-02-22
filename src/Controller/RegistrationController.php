@@ -31,10 +31,17 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            $user->setRoles(['USER_ROLE']);
-            /*
-             * TODO if form administrateur == true { $user->setRoles(['ADMIN_ROLE'])
-             */
+            $user->setRoles(['ROLE_USER']);
+            if ($user->getAdministrateur()) {
+                $user->setRoles(['ROLE_ADMIN']);
+            }
+
+            /*{% if is_granted('ROLE_ADMIN') %}
+
+            {# Ici le contenu réservé aux administrateurs#}
+
+                {% endif %}*/
+
 
             $entityManager->persist($user);
             $entityManager->flush();
