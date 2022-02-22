@@ -4,6 +4,7 @@
 <h2>Ajouter une sortie</h2>
     {{ form_start(sortieForm) }}
     {% do sortieForm.supprimer.setRendered() %}
+    {% do sortieForm.annuler.setRendered() %}
         {{ form_row(sortieForm.nom) }}
         {{ form_row(sortieForm.infosSortie) }}
         {{ form_row(sortieForm.duree) }}
@@ -12,7 +13,6 @@
     <div class="inline">
         {{ form_row(sortieForm.enregistrer) }}
         {{ form_row(sortieForm.publier) }}
-        {{ form_row(sortieForm.annuler) }}
     </div>
     {{ form_end(sortieForm) }}
 {% endblock %}
