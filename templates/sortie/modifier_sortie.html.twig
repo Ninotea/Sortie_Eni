@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+Sortie {{ sortieModif.nom }}
+{% endblock %}
+
+{% block body %}
+<h2>{{ sortieModif.nom }}</h2>
+    <div>
+        {{ sortieModif.infosSortie }}
+    </div>
+{% endblock %}
+

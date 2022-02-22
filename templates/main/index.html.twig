@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello MainController!{% endblock %}
+{% block title %}Acceuil{% endblock %}
 
 {% block body %}
 <h2>Acceuil</h2>
+    
+    <button><a href="{{ path('sortie_create') }}">Ajouter une sortie</a></button>
 {% endblock %}
