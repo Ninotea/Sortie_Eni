@@ -1,9 +1,13 @@
 <nav class="inline">
-    {% if is_granted("ROLE_ADMIN") %}
-        <a href="{{ path('main_ville') }}">Ville</a>
-        <a href="{{ path('main_campus') }}">Campus</a>
-    {% endif %}
-    <a href="{{ path('main_acceuil') }}">Acceuil</a>
-    <a href="{{ path('main_profil') }}">Mon profil</a>
-    <a href="{{ path('app_login') }}">Se connecter</a>
+        {% if app.user %}
+                {% if is_granted("ROLE_ADMIN") %}
+                        <a href="{{ path('main_ville') }}">Ville</a>
+                        <a href="{{ path('main_campus') }}">Campus</a>
+                {% endif %}
+                <a href="{{ path('main_profil') }}">Mon profil</a>
+                <a href="{{ path('main_acceuil') }}">Acceuil</a>
+                <a href="{{ path('app_logout') }}">Se deconnecter</a>
+        {% else %}
+                <a href="{{ path('app_login') }}">Se connecter</a>
+        {% endif %}
 </nav>
