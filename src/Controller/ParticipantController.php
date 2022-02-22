@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class ParticipantController extends AbstractController
-
+{
     /**
      * @Route("/modificationProfil", name="main_modification")
      */
@@ -16,13 +16,14 @@ class ParticipantController extends AbstractController
     {
         return $this->render('participant/modificationProfil.html.twig');
     }
+
     /**
      * @Route("/profil", name="main_profil")
      */
     public function profil(): Response
-{
-    return $this->render('participant/profil.html.twig');
-}
+    {
+        return $this->render('participant/profil.html.twig');
+    }
 
     /**
      * @Route("/login", name="app_login")
