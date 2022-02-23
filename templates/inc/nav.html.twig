@@ -1,8 +1,9 @@
 <nav class="inline">
         {% if app.user %}
                 {% if is_granted("ROLE_ADMIN") %}
-                        <a href="{{ path('main_ville') }}">Ville</a>
+                        <a href="{{ path('main_ville') }}">Villes</a>
                         <a href="{{ path('main_campus') }}">Campus</a>
+                        <a href="{{ path('app_register') }}">Ajouter un profil</a>
                 {% endif %}
                 <a href="{{ path('main_profil') }}">Mon profil</a>
                 <a href="{{ path('main_acceuil') }}">Acceuil</a>

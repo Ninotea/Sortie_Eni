@@ -2,10 +2,12 @@
 
 namespace App\Form;
 
+use App\Entity\Lieu;
 use App\Entity\Sortie;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,27 +18,42 @@ class SortieType extends AbstractType
     {
         $builder
             ->add('nom')
+            ->add('infosSortie')
+            ->add('duree')
+            ->add('lieu', EntityType::class,[
+                'class'=> Lieu::class,
+                'choice_label'=>'nom'
+            ])
+            ->add('nbInscriptionsMax',IntegerType::class,[
+                'label'=>'Nombre d\'inscription maximum'
+            ])
             ->add('dateHeureDebut',DateTimeType::class,[
                 'html5' => true,
                 'widget' => 'single_text',
             ])
-            ->add('duree')
             ->add('dateLimiteInscription',DateTimeType::class,[
                 'html5' => true,
                 'widget' => 'single_text',
             ])
-            ->add('infosSortie')
             ->add('publier',SubmitType::class,[
-                'label'=>'Publier'
+                'attr'=>['class'=>'soumission'],
+                'label_format'=>'Publier'
             ])
             ->add('enregistrer',SubmitType::class,[
-                'label'=>'Enregistrer'
+                'attr'=>['class'=>'soumission'],
+                'label_format'=>'Enregistrer'
             ])
             ->add('annuler',SubmitType::class,[
-                'label'=>'Annuler'
+                'attr'=>['class'=>'soumission'],
+                'label_format'=>'Annuler'
             ])
             ->add('supprimer',SubmitType::class,[
-                'label'=>'Supprimer la sortie'
+                'attr'=>['class'=>'soumission'],
+                'label_format'=>'Supprimer la sortie'
+            ])
+            ->add('ajouterLieu',SubmitType::class,[
+                'attr'=>['class'=>'soumission'],
+                'label_format'=>'Ajouter un lieu'
             ])
         ;
     }

@@ -2,19 +2,34 @@
 
 {% block body %}
 <h2>Ajouter une sortie</h2>
-    {{ form_start(sortieForm) }}
-    {% do sortieForm.supprimer.setRendered() %}
-    {% do sortieForm.annuler.setRendered() %}
-        {{ form_row(sortieForm.nom) }}
-        {{ form_row(sortieForm.infosSortie) }}
-        {{ form_row(sortieForm.duree) }}
-        {{ form_row(sortieForm.dateHeureDebut) }}
-        {{ form_row(sortieForm.dateLimiteInscription) }}
+    {{ form_start(formSortie) }}
     <div class="inline">
-        {{ form_row(sortieForm.enregistrer) }}
-        {{ form_row(sortieForm.publier) }}
+        <div>
+            {% do formSortie.supprimer.setRendered() %}
+            {% do formSortie.annuler.setRendered() %}
+            {% do formSortie.ajouterLieu.setRendered() %}
+
+            {{ form_row(formSortie.nom) }}
+            {{ form_row(formSortie.infosSortie) }}
+            {{ form_row(formSortie.duree) }}
+            {{ form_row(formSortie.nbInscriptionsMax) }}
+            {{ form_row(formSortie.dateHeureDebut) }}
+            {{ form_row(formSortie.dateLimiteInscription) }}
+            <div class="inline">
+                {{ form_row(formSortie.enregistrer) }}
+                {{ form_row(formSortie.publier) }}
+            </div>
+        </div>
+        <div>
+            <p> Campus : TODO CAMPUS app.user.campus   </p>
+            {{ form_row(formLieu.ville) }}
+            {{ form_row(formSortie.lieu) }}
+            {{ form_end(formSortie) }}
+            <p> Rue : TODO rue en script  </p>
+            <p> Code Postal : TODO rue en script   </p>
+            <button><a href="{{ path('sortie_lieu') }}">Ajouter un lieu</a></button>
+        </div>
     </div>
-    {{ form_end(sortieForm) }}
 {% endblock %}
 
 {% block title %}
