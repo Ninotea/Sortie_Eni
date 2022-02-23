@@ -48,6 +48,16 @@ class Sortie
      */
     private $unEtat;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $nbInscriptionsMax;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Lieu::class, inversedBy="sortie")
+     */
+    private $lieu;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -121,6 +131,30 @@ class Sortie
     public function setUnEtat(?Etat $unEtat): self
     {
         $this->unEtat = $unEtat;
+
+        return $this;
+    }
+
+    public function getNbInscriptionsMax(): ?int
+    {
+        return $this->nbInscriptionsMax;
+    }
+
+    public function setNbInscriptionsMax(?int $nbInscriptionsMax): self
+    {
+        $this->nbInscriptionsMax = $nbInscriptionsMax;
+
+        return $this;
+    }
+
+    public function getLieu(): ?Lieu
+    {
+        return $this->lieu;
+    }
+
+    public function setLieu(?Lieu $lieu): self
+    {
+        $this->lieu = $lieu;
 
         return $this;
     }

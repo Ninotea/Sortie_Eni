@@ -2,8 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Etat;
+use App\Entity\Lieu;
 use App\Entity\Sortie;
+use App\Form\LieuType;
 use App\Form\SortieType;
 use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
@@ -26,12 +27,16 @@ class SortieController extends AbstractController
                            EtatRepository $etatRepository)
     {
         $sortie = new Sortie();
-        $form = $this->createForm(SortieType::class, $sortie);
-        $form->handleRequest($request);
+        $formSortie = $this->createForm(SortieType::class, $sortie);
+        $formSortie->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        $lieu = new Lieu();
+        $formLieu = $this->createForm(LieuType::class,$lieu);
+        $formLieu->handleRequest($request);
 
-            $button = $form->getClickedButton()->getName() ;
+        if ($formSortie->isSubmitted() && $formSortie->isValid()) {
+
+            $button = $formSortie->getClickedButton()->getName() ;
             switch ($button)
             {
                 case "publier" :
@@ -44,8 +49,12 @@ class SortieController extends AbstractController
                     $sortie->setUnEtat($etat);
                     $this->addFlash('success','Sortie enregistrée !');
                     break;
-
+                case "ajouterLieu" :
+                    return $this->redirectToRoute('sortie_lieu',[
+                        'donneesSortie'=>$sortie
+                    ]);
             }
+
             $entityManager->persist($sortie);
             $entityManager->flush();
 
@@ -55,7 +64,8 @@ class SortieController extends AbstractController
         }
 
         return $this->render('sortie/ajout_sortie.html.twig',[
-            'sortieForm'=> $form->createView()
+            'formSortie'=> $formSortie->createView(),
+            'formLieu' => $formLieu->createView()
         ]);
     }
     /**
@@ -103,6 +113,7 @@ class SortieController extends AbstractController
                 case "supprimer" :
                     $this->addFlash('success','Sortie supprimer !');
                     $entityManager->remove($sortie);
+                    $entityManager->flush();
                     return $this->redirectToRoute('main_acceuil');
 
             }
@@ -120,4 +131,25 @@ class SortieController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/ajout_lieu", name="lieu")
+     */
+    public function ajouterLieu(Request $request,EntityManagerInterface $entityManager): Response
+    {
+        $lieu = new Lieu();
+        $formLieu = $this->createForm(LieuType::class,$lieu);
+        $formLieu->handleRequest($request);
+
+        if ($formLieu->isSubmitted() && $formLieu->isValid()) {
+
+            $entityManager->persist($lieu);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('sortie_create');
+        }
+
+        return $this->render('sortie/ajout_lieu.html.twig',[
+            'formLieu' => $formLieu->createView()
+        ]);
+    }
 }

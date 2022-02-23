@@ -1,9 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Ville
+    Villes
 {% endblock %}
 
 {% block body %}
-    Page Ville
+    <h2>Ajouter une ville :</h2>
+    {{ form_start(villeForm) }}
+    {{ form_end(villeForm) }}
+
+    <h2>Liste des villes connues :</h2>
+    <section>
+        <ul>
+            {% for ville in liste_ville %}
+                <li> {{ ville.nom }} {{ ville.codePostal }} <br> - nombre de lieux connus : {{ ville.lieux.count }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+
+
 {% endblock %}
