@@ -21,7 +21,7 @@
             </div>
         </div>
         <div>
-            <p> Campus : TODO CAMPUS app.user.campus   </p>
+            <p> Campus : {{ app.user.leCampus.nom}}  </p>
             {{ form_row(formLieu.ville) }}
             {{ form_row(formSortie.lieu) }}
             {{ form_end(formSortie) }}

@@ -4,15 +4,20 @@
 
 
     <h2>Modification du profil</h2>
-
+    <div>
+        Campus : {{ app.user.leCampus.nom }}
+    </div>
     {{ form_start(form) }}
     {% do form.administrateur.setRendered() %}
     {% do form.agreeTerms.setRendered() %}
     {% do form.actif.setRendered() %}
+    {% do form.leCampus.setRendered() %}
         {{ form_widget(form) }}
-    <div class="inline">
+    <div class="inline"> <!-- mettre le bouton modifier en type form-->
        <button type="submit">Modifier</button>
     </div>
+    {# TODO afficher qui si administrateur "les boutons suppr et desac" #}
+
     {{ form_end(form) }}
 
 
