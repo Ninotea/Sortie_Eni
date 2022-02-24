@@ -2,13 +2,27 @@
 
 {% block body %}
 
-    <p>Nom : {{ app.user.nom }}</p>
-    <p>Prénom : {{ app.user.prenom }}</p>
-    <p>E-mail : {{ app.user.email }}</p>
-    <p>telephone : {{ app.user.telephone }}</p>
-    <!--<p>campus : {{ app.user.campus }}</p>-->
+    {% if participant is defined %}
+        <p>Nom : {{ participant.nom }}</p>
+        <p>Prénom : {{ participant.prenom }}</p>
+        <p>E-mail : {{ participant.email }}</p>
+        <p>telephone : {{ participant.telephone }}</p>
+    {% else %}
+        <p>Nom : {{ app.user.nom }}</p>
+        <p>Prénom : {{ app.user.prenom }}</p>
+        <p>E-mail : {{ app.user.email }}</p>
+        <p>telephone : {{ app.user.telephone }}</p>
+    {% endif %}
 
-    <button><a href="modificationProfil.html.twig">Modifier</button>
+    {% if participant is defined %}
+        {% set participantId = participant.id %}
+    {% elseif app.user.nom is not null %}
+        {% set participantId = app.user.id %}
+    {% endif %}
+
+    {% if is_granted("ROLE_ADMIN") or participant is not defined %}
+        <button><a href="{{ path('profil_modifier',{'id' : participantId}) }}">Modifier</a></button>
+    {% endif %}
 
 {% endblock %}
 

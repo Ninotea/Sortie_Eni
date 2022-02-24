@@ -2,25 +2,38 @@
 
 namespace App\Controller;
 
+use App\Entity\Participant;
+use App\Form\RegistrationFormType;
+use App\Repository\ParticipantRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class ParticipantController extends AbstractController
 {
-    /**
-     * @Route("/modificationProfil", name="main_modification")
-     */
-    public function update(): Response
-    {
-        return $this->render('participant/modificationProfil.html.twig');
-    }
 
     /**
-     * @Route("/profil", name="main_profil")
+     * @Route("/profil/{id}", name="participant_profil_id")
+     * @param int $id
+     * @param ParticipantRepository $participantRepository
+     * @return Response
      */
-    public function profil(): Response
+    public function afficherProfilId(int $id, ParticipantRepository $participantRepository): Response
+    {
+        $participant = $participantRepository->find($id);
+        return $this->render('participant/profil.html.twig', [
+            'participant' => $participant
+        ]);
+    }
+
+    
+    /**
+     * @Route("/profil", name="participant_profil")
+     */
+    public function afficherProfil(): Response
     {
         return $this->render('participant/profil.html.twig');
     }
@@ -31,7 +44,7 @@ class ParticipantController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
-             return $this->redirectToRoute('_profiler_home');
+             return $this->redirectToRoute('main_acceuil');
         }
 
         // get the login error if there is one
@@ -48,5 +61,29 @@ class ParticipantController extends AbstractController
     public function logout(): void
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+    }
+
+    /**
+     * @Route("/modification/{id}", name="profil_modifier")
+     */
+    public function update(int $id,
+                         EntityManagerInterface $entityManager,
+                         ParticipantRepository $participantRepository,
+                         Request $request): Response
+    {
+        $participant = $participantRepository->find($id);
+          $form = $this->createForm(RegistrationFormType::class, $participant);
+          $form->handleRequest($request);
+
+          if ($form->isSubmitted() && $form->isValid())
+          {
+              //TODO perciste et flush le participant
+              return $this->redirectToRoute('participant_profil_id', [
+                  'id'=>$participant->getId()
+              ]);
+          }
+          return $this->render('participant/modificationProfil.html.twig',
+              ['form'=>$form->createView()]);
+
     }
 }
