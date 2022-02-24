@@ -66,7 +66,7 @@ class ParticipantController extends AbstractController
     /**
      * @Route("/modification/{id}", name="profil_modifier")
      */
-    public function update(int $id,
+    public function gestionProfil(int $id,
                          EntityManagerInterface $entityManager,
                          ParticipantRepository $participantRepository,
                          Request $request): Response
@@ -77,10 +77,18 @@ class ParticipantController extends AbstractController
 
           if ($form->isSubmitted() && $form->isValid())
           {
-              //TODO perciste et flush le participant
-              return $this->redirectToRoute('participant_profil_id', [
-                  'id'=>$participant->getId()
-              ]);
+
+              //TODO regarder la méthode de tri des boutons et executer la bonne fonction SQL en fonction du bouton
+
+              //TODO methode supprimer
+
+              //TODO methode desactiver
+
+
+              //TODO persist et flush le participant "MODIFIER"
+                  return $this->redirectToRoute('participant_profil_id', [
+                      'id'=>$participant->getId()
+                  ]);
           }
           return $this->render('participant/modificationProfil.html.twig',
               ['form'=>$form->createView()]);

@@ -6,6 +6,9 @@
     <h2>Renseigner les informations du participant à ajouter :</h2>
 
     {{ form_start(registrationForm) }}
+    {% do registrationForm.pseudo.setRendered() %}
+    {# TODO do set rendered "les boutons qu'on a pas besoin" #}
+
         {{ form_widget(registrationForm) }}
 
         <button type="submit" class="btn">Ajouter</button>
