@@ -3,11 +3,22 @@
 {% block body %}
 
 
-    <h1>ici tu modifie</h1>
+    <h2>Modification du profil</h2>
+
+    {{ form_start(form) }}
+    {% do form.administrateur.setRendered() %}
+    {% do form.agreeTerms.setRendered() %}
+    {% do form.actif.setRendered() %}
+        {{ form_widget(form) }}
+    <div class="inline">
+       <button type="submit">Modifier</button>
+    </div>
+    {{ form_end(form) }}
+
 
 
 {% endblock %}
 
 {% block title %}
-    <h2>Page modifier profil</h2>
+
 {% endblock %}
