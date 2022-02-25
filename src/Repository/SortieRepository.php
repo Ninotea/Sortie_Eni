@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Donnee\DonneeDeRecherche;
+use App\Donnee\DonneeSorties;
 use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,32 +21,27 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
-    // /**
-    //  * @return Sortie[] Returns an array of Sortie objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function rechercheSortie(DonneeSorties $donnees)
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        // possibilité d'ajouter un paginator ICI
+        return $this->getRequete($donnees)->getQuery()->getResult();
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Sortie
+    public function getRequete(DonneeSorties $donnees)
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
+        $query = $this
+            ->createQueryBuilder('sorty') //sorty pour sortie recherché (n'est pas une entité sortie)
+            ->select('sorty','etat','li','campus','orga','partici'//
+            )
+            ->join('sorty.unEtat','etat')
+            ->join('sorty.lieu','li')
+            ->join('sorty.leCampus','campus')
+            ->join('sorty.organisateur','orga')
+            ->leftJoin('sorty.participants','partici')
+            /*
+            */
         ;
+
+        return $query;
     }
-    */
 }

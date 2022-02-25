@@ -5,5 +5,12 @@
 {% block body %}
     <h2>Acceuil</h2>
 
+    {{ form_start(formulaire) }}
+    {{ form_end(formulaire) }}
+    {{ dump(sorties) }}
+
     <button><a href="{{ path('sortie_create') }}">Ajouter une sortie</a></button>
+
+    {% include 'sortie/_affichageSortie.html.twig' with {sorties: sorties , currentUser: currentUser} only %}
+
 {% endblock %}
