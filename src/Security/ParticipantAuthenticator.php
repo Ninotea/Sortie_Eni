@@ -50,8 +50,8 @@ class ParticipantAuthenticator extends AbstractLoginFormAuthenticator
         }
 
         // For example:
-        return new RedirectResponse($this->urlGenerator->generate('main_acceuil'));
-        //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        return new RedirectResponse($this->urlGenerator->generate('sortie_acceuil'));
+
     }
 
     protected function getLoginUrl(Request $request): string

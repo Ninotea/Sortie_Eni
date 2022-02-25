@@ -4,12 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Ville;
 use App\Form\VilleType;
+use App\Repository\ParticipantRepository;
 use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class MainController extends AbstractController
 {
@@ -18,7 +20,12 @@ class MainController extends AbstractController
      */
     public function index(): Response
     {
-        return $this->redirectToRoute('sortie_acceuil');
+
+            $auth = $this->getUser();
+            if(!empty($auth)){
+               return $this->redirectToRoute('sortie_acceuil');
+            }
+            return $this->redirectToRoute('app_login');
     }
     /**
      * @Route("/profil", name="main_profil")
