@@ -39,6 +39,10 @@ class SortieRepository extends ServiceEntityRepository
             ->join('sorty.organisateur','orga')
             ->leftJoin('sorty.participants','partici')
             /*
+            if(!empty($donnes->mot))
+            {
+                $query->andWhere(); // Titre contient $mot )
+            }
             */
         ;
 

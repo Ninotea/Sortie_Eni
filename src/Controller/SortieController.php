@@ -53,14 +53,12 @@ class SortieController extends AbstractController
             switch ($button)
             {
                 case "publier" :
-                    $etat = $etatRepository->findOneBy(['libelle'=>'Ouverte']);
-                    $sortie->setUnEtat($etat);
-                    $this->addFlash('success','Sortie publier !');
+                    $etatNom = 'Ouverte';
+                    $message = 'Sortie publier !';
                     break;
                 case "enregistrer" :
-                    $etat = $etatRepository->findOneBy(['libelle'=>'Créée']);
-                    $sortie->setUnEtat($etat);
-                    $this->addFlash('success','Sortie enregistrée !');
+                    $etatNom = 'Créée';
+                    $message = 'Sortie enregistrée !';
                     break;
                 case "ajouterLieu" :
                     return $this->redirectToRoute('sortie_lieu',[
@@ -68,6 +66,9 @@ class SortieController extends AbstractController
                     ]);
             }
 
+            $this->addFlash('success',$message);
+            $etat = $etatRepository->findOneBy(['libelle'=>$etatNom]);
+            $sortie->setUnEtat($etat);
             $entityManager->persist($sortie);
             $entityManager->flush();
 
@@ -112,8 +113,19 @@ class SortieController extends AbstractController
         if ($form->isSubmitted() && $form->isValid())
         {
             $action = $form->getClickedButton()->getName() ;
+            switch ($action)
+            {
+                case "enregistrer":
+                case "publier":
+                    $route = "detail";
+                    break;
+                case "annuler":
+                case "supprimer":
+                    $route = "acceuil";
+                    break;
 
-            return $this->redirectToRoute('sortie_changeEtatFactory',['action'=>$action,'idSortie'=>$id]);
+            }
+            return $this->redirectToRoute('sortie_changeEtatFactory',['action'=>$action,'idSortie'=>$id,'route'=>$route]);
 
         }
 
@@ -158,6 +170,7 @@ class SortieController extends AbstractController
                                    UserInterface $user,
                                    ParticipantRepository $participantRepository):Response
     {
+        //$this->actualiserEtat(); TODO: actualiser les etats dans la BDD en fonction de la date du jour
         $donnees = new DonneeSorties();
         $currentUser = $participantRepository->findOneBy(['email'=>$user->getUserIdentifier()]);
         //gestion page apginator ICI
@@ -175,12 +188,14 @@ class SortieController extends AbstractController
 
 
     /**
-     * @Route("/{action}/{idSortie}/{idUser}", name="inscriptionEtAction")
+     * @Route("/{action}/{idSortie}/{idUser}/{route}", name="inscriptionEtAction")
      */
     public function inscriptionEtAction(ParticipantRepository $participantRepository,
                                         SortieRepository $sortieRepository,
+                                        EntityManagerInterface $entityManager,
                                         int $idSortie,
                                         int $idUser,
+                                        String $route,
                                         String $action) :Response
     {
         $sortie = $sortieRepository->find($idSortie);
@@ -198,17 +213,22 @@ class SortieController extends AbstractController
                 return $this->redirectToRoute('sortie_modifier',['id'=>$idSortie]);
             case "annuler":
             case "publier":
-                return $this->redirectToRoute('sortie_changeEtatFactory',['action'=>$action,'idSortie'=>$idSortie]);
+                return $this->redirectToRoute('sortie_changeEtatFactory',['action'=>$action,'idSortie'=>$idSortie,'route'=>$route]);
         }
+
+        $entityManager->persist($sortie);
+        $entityManager->flush();
+
         return $this->redirectToRoute('sortie_acceuil');
     }
 
 
 
     /**
-     * @Route("/{action}/{idSortie}", name="changeEtatFactory")
+     * @Route("/{action}/{idSortie}/{route}", name="changeEtatFactory")
      */
     public function changeEtatFactory(String $action,
+                                      String $route,
                                       int $idSortie,
                                       EntityManagerInterface $entityManager,
                                       SortieRepository $sortieRepository,
@@ -225,25 +245,27 @@ class SortieController extends AbstractController
                 break;
 
             case "annuler":
+                $redirect = $route;
                 $libelleEtat = 'Annulée';
                 $messageFlash = 'Sortie annulée.';
                 // TODO: gerer les commentaires d'annulation
                 break;
 
             case "publier":
-                $redirect = "detail";
+                $redirect = $route;
                 $libelleEtat = 'Ouverte';
                 $messageFlash = 'Sortie publiée !';
                 break;
 
             case "supprimer" :
+                $redirect = $route;
                 $entityManager->remove($sortie);
                 $entityManager->flush();
                 $this->addFlash('success','Sortie supprimer !');
                 break;
 
             case "enregistrer" :
-                $redirect = "detail";
+                $redirect = $route;
                 $libelleEtat = 'Créée';
                 $messageFlash = 'Sortie enregistrée !';
                 break;
@@ -266,9 +288,11 @@ class SortieController extends AbstractController
             return $this->redirectToRoute('sortie_detail', ['id'=>$idSortie]);
         }elseif($redirect === "modifier"){
             return $this->redirectToRoute('sortie_modifier',['id'=>$idSortie]);
-        } // autre cas
+        }elseif (($redirect === "acceuil")){
             return $this->redirectToRoute('sortie_acceuil');
-
+        }
+        $this->addFlash('warning','Erreur de routage !');
+        return $this->redirectToRoute('sortie_acceuil');
     }
 
 }

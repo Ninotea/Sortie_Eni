@@ -37,23 +37,18 @@ class SortieType extends AbstractType
                 'widget' => 'single_text',
             ])
             ->add('publier',SubmitType::class,[
-                'attr'=>['class'=>'soumission'],
                 'label_format'=>'Publier'
             ])
             ->add('enregistrer',SubmitType::class,[
-                'attr'=>['class'=>'soumission'],
                 'label_format'=>'Enregistrer'
             ])
             ->add('annuler',SubmitType::class,[
-                'attr'=>['class'=>'soumission'],
-                'label_format'=>'Annuler'
+                 'label_format'=>'Annuler'
             ])
             ->add('supprimer',SubmitType::class,[
-                'attr'=>['class'=>'soumission'],
                 'label_format'=>'Supprimer la sortie'
             ])
             ->add('ajouterLieu',SubmitType::class,[
-                'attr'=>['class'=>'soumission'],
                 'label_format'=>'Ajouter un lieu'
             ])
         ;
