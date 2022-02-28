@@ -4,12 +4,36 @@
 
 {% block body %}
     <h2>Acceuil</h2>
-
-    {{ form_start(formulaire) }}
+    {{ form_start(formulaire , {'attr': {'id': 'formulaireRecherche'}}) }}
+        {{ form_row(formulaire.mot) }}
+        {{ form_row(formulaire.campus) }}
+        {{ form_row(formulaire.dateMin) }}
+        {{ form_row(formulaire.dateMax) }}
+        {{ form_row(formulaire.inscritFalse) }}
+        {{ form_row(formulaire.inscritTrue) }}
+        {{ form_row(formulaire.organisateurFalse) }}
+        {{ form_row(formulaire.organisateurTrue) }}
+        {{ form_row(formulaire.passee) }}
+        {{ form_row(formulaire.ouverte) }}
+        {{ form_row(formulaire.creee) }}
+        {{ form_row(formulaire.rechercher) }}
     {{ form_end(formulaire) }}
 
     <button><a href="{{ path('sortie_create') }}">Ajouter une sortie</a></button>
 
     {% include 'sortie/_affichageSortie.html.twig' with {sorties: sorties , currentUser: currentUser} only %}
+
+    {% if submitted == false %}
+        <script>
+            var checkboxs, index;
+            checkboxs = document.getElementsByClassName("checkbox");
+            for (index = 0; index < checkboxs.length; ++index) {
+                checkboxs[index].setAttribute('checked', 'checked');
+            }
+            var datemin = document.getElementById('inputDateMin');
+            var datemax = document.getElementById('inputDateMax');
+            console.log(datemin.value)
+        </script>
+    {% endif %}
 
 {% endblock %}

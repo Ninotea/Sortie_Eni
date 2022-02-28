@@ -6,6 +6,7 @@ use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SortieRepository::class)
@@ -33,6 +34,11 @@ class Sortie
      * @ORM\Column(type="integer", nullable=true)
      */
     private $duree;
+
+    /**
+     * Non utilisé en base de donnée
+     */
+    private $dureeH;
 
     /**
      * @ORM\Column(type="datetime")
@@ -231,4 +237,24 @@ class Sortie
 
         return $this;
     }
+
+    /**
+     *
+     */
+    public function getDureeH()
+    {
+        return $this->dureeH;
+    }
+
+    /**
+     *
+     */
+    public function setDureeH($dureeH): void
+    {
+        $this->dureeH = $dureeH;
+    }
+
+
+
+
 }

@@ -49,6 +49,12 @@ class SortieController extends AbstractController
             $sortie->setLeCampus($currentUser->getLeCampus());
             $sortie->setOrganisateur($currentUser);
 
+            // Conversion de la durée en entier
+            $timeH = date_format($sortie->getDureeH(),'H');
+            $timeM = date_format($sortie->getDureeH(),'i');
+            $sortie->setDuree((integer)$timeH*60 + (integer)$timeM);
+
+
             $button = $formSortie->getClickedButton()->getName() ;
             switch ($button)
             {
@@ -92,8 +98,12 @@ class SortieController extends AbstractController
     public function detail(int $id, SortieRepository $sortieRepository): Response
     {
         $sortie = $sortieRepository->find($id);
+        $dureeH = $sortie->getDuree()/60;
+        $dureeM = $sortie->getDuree()%60;
+        $duree = "$dureeH:$dureeM";
         return $this->render('sortie/detail_sortie.html.twig',[
-            'sortieAffichee' => $sortie
+            'sortieAffichee' => $sortie,
+            'duree'=>$duree
         ]);
     }
 
@@ -174,14 +184,18 @@ class SortieController extends AbstractController
         $donnees = new DonneeSorties();
         $currentUser = $participantRepository->findOneBy(['email'=>$user->getUserIdentifier()]);
         //gestion page apginator ICI
+        //gestion DATE
         $formulaire = $this->createForm(DonneeType::class,$donnees);
         $formulaire->handleRequest($request);
+        $submitted = false;
+        if($formulaire->isSubmitted()) $submitted = true;
         //$donnees est hydratée
-        $sorties = $sortieRepository->rechercheSortie($donnees);
+        $sorties = $sortieRepository->rechercheSortie($donnees,$currentUser);
         return $this->render('main/index.html.twig',[
             'sorties'=>$sorties,
             'formulaire'=>$formulaire->createView(),
-            'currentUser'=>$currentUser
+            'currentUser'=>$currentUser,
+            'submitted'=>$submitted
         ]);
     }
 

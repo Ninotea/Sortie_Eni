@@ -12,7 +12,7 @@ class DonneeSorties
     /**
      * @var string
      */
-    public string $mot = '';
+    public $mot = '';
 
     /**
      * @var Campus
@@ -22,22 +22,13 @@ class DonneeSorties
     /**
      * @var \DateTime
      */
-    public \DateTime $dateMin;
+    public $dateMin;
+
 
     /**
      * @var \DateTime
      */
-    public \DateTime $dateMax;
-
-    /**
-     * @var Participant
-     */
-    public Participant $organisateur;
-
-    /**
-     * @var Participant[]
-     */
-    public array $participant = [];
+    public $dateMax;
 
     /**
      * @var Etat[]
@@ -47,25 +38,36 @@ class DonneeSorties
     /**
      * @var bool
      */
-    public Boolean $organisateurTrue;
+    public $organisateurTrue;
 
     /**
      * @var bool
      */
-    public Boolean $organisateurFalse;
+    public $organisateurFalse;
 
     /**
      * @var bool
      */
-    public Boolean $inscritTrue;
+    public $inscritTrue;
 
     /**
      * @var bool
      */
-    public Boolean $inscritFalse;
+    public $inscritFalse;
 
     /**
      * @var bool
      */
-    public Boolean $passee;
+    public $passee;
+
+    /**
+     * @var bool
+     */
+    public $ouverte;
+
+    /**
+     * @var bool
+     */
+    public $creee;
+
 }

@@ -5,36 +5,55 @@ namespace App\Form;
 use App\Entity\Campus;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
+use DateTime;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use function Sodium\add;
 
 class SortieType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $DateDuJour = new DateTime('now');
+        $DateDuJour->setTime('12','0');
+        $FDateDuJour = date_format($DateDuJour,'Y-m-d'.'\T'.'H:00');
+
         $builder
             ->add('nom')
             ->add('infosSortie')
-            ->add('duree')
+            ->add('duree',NumberType::class,[
+                'label'=>'Durée'
+            ])
+            ->add('dureeH',TimeType::class,[
+                'label'=>'Durée : ',
+                'html5' => true,
+                'widget' => 'single_text',
+                'input_format'=>'H/i',
+                'attr'=>['value' => "02:30"],
+            ])
             ->add('lieu', EntityType::class,[
                 'class'=> Lieu::class,
                 'choice_label'=>'nom'
             ])
             ->add('nbInscriptionsMax',IntegerType::class,[
-                'label'=>'Nombre d\'inscription maximum'
+                'label'=>'Nombre d\'inscription maximum : '
             ])
             ->add('dateHeureDebut',DateTimeType::class,[
                 'html5' => true,
                 'widget' => 'single_text',
+                'attr' => ['value'=>$FDateDuJour],
             ])
             ->add('dateLimiteInscription',DateTimeType::class,[
                 'html5' => true,
                 'widget' => 'single_text',
+                'attr' => ['value'=>$FDateDuJour],
             ])
             ->add('publier',SubmitType::class,[
                 'label_format'=>'Publier'
