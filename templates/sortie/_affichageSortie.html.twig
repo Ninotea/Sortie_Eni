@@ -3,54 +3,70 @@
     <tr>
         <th scope="col">Nom de la sortie</th>
         <th scope="col">Date de la sortie</th>
-        <th scope="col">Clôture</th>
+        <th scope="col">Clôture inscription</th>
         <th scope="col">Inscrits / Places</th>
         <th scope="col">Etat</th>
-        <th scope="col">Vous êtes inscrit</th>
+        <th scope="col">Inscrit</th>
         <th scope="col">Organisateur</th>
         <th scope="col">Actions</th>
     </tr>
     </thead>
     <tbody class="tbody-light overflow-auto" >
         {% for sortie in sorties %}
-            {% set jesuisinscrit = false %}
-        <tr>
-            <th scope="row">{{ sortie.nom  }}</th>
-            <td>{{ sortie.dateHeureDebut | format_datetime('short', 'none', locale='fr')}}</td>
-            <td>{{ sortie.dateLimiteInscription | format_datetime('short', 'none', locale='fr')}}</td>
-            <td>{{sortie.participants.count}}/{{ sortie.nbInscriptionsMax }}</td>
-            <td>{{ sortie.unEtat}}</td>
-            <td>
-                {% if sortie.participants.contains(app.user) %}
-                    {% set jesuisinscrit = true %}
-                    Oui
-                {% endif %}
-            </td>
-            <td>{{ sortie.organisateur.pseudo }}</td>
-            <!-- TD des Actions -->
-            <td>
-                <a href="{{ path('sortie_detail',{'id': sortie.id}) }}">Afficher</a>
-                {% if sortie.organisateur.id is same as(app.user.id) %}
-                    {% if sortie.unEtat.libelle is same as("Créée") %}
-                        <a href="{{ path('sortie_inscriptionEtAction',{'action': 'publier','idSortie': sortie.id ,'idUser': app.user.id,'route':'acceuil'}) }}"
-                        >Publier </a>
-                    {% endif %}
-                    <a href="{{ path('sortie_inscriptionEtAction',{'action': 'modifier','idSortie': sortie.id ,'idUser': app.user.id,'route':'UNUSED'}) }}"
-                    >Modifier</a>
-                    <a href="{{ path('sortie_inscriptionEtAction',{'action': 'annuler','idSortie': sortie.id ,'idUser': app.user.id,'route':'acceuil'}) }}"
-                    >Annuler</a>
-                {% else %}
-                    {% if jesuisinscrit %}
-                        <a href="{{ path('sortie_inscriptionEtAction',{'action': 'desinscrire','idSortie': sortie.id ,'idUser': app.user.id,'route':'UNUSED'}) }}"
-                        >Se desister</a>
-                    {% else %}
-                        <a href="{{ path('sortie_inscriptionEtAction',{'action': 'inscrire','idSortie': sortie.id ,'idUser': app.user.id,'route':'UNUSED'}) }}"
-                        >S'inscrire</a>
-                    {% endif %}
-                {% endif %}
-            </td>
 
-        </tr>
+            {% set jesuisinscrit = false %}
+            {% set messageInscrit = "" %}
+            {% set enabled = true %}
+            {% set colorgrey ="" %}
+
+            {% if sortie.participants.contains(app.user) %}
+                {% set jesuisinscrit = true %}
+                {% set messageInscrit = "Oui" %}
+            {% endif %}
+
+            {% if sortie.participants.count == sortie.nbInscriptionsMax %}
+                {% set enabled = false %}
+                {% set colorgrey = "color : grey" %}
+            {% endif %}
+
+            <tr>
+                <th scope="row">{{ sortie.nom  }}</th>
+                <td>{{ sortie.dateHeureDebut | format_datetime('short', 'none', locale='fr')}}</td>
+                <td>{{ sortie.dateLimiteInscription | format_datetime('short', 'none', locale='fr')}}</td>
+                <td style="{{ colorgrey }}">{{sortie.participants.count}}/{{ sortie.nbInscriptionsMax }}</td>
+                <td>{{ sortie.unEtat}}</td>
+                <td>{{ messageInscrit }}</td>
+                <td>{{ sortie.organisateur.pseudo }}</td>
+                <!-- TD des Actions -->
+                <td>
+                    <a href="{{ path('sortie_detail',{'id': sortie.id}) }}">Afficher</a>
+
+                    {% if sortie.organisateur.id is same as(app.user.id) %}
+
+                        {% if sortie.unEtat.libelle is same as("Créée") %}
+                            <a href="{{ path('sortie_inscriptionEtAction',{'action': 'publier','idSortie': sortie.id ,'idUser': app.user.id,'route':'acceuil'}) }}"
+                            >Publier </a>
+                        {% endif %}
+
+                        <a href="{{ path('sortie_inscriptionEtAction',{'action': 'modifier','idSortie': sortie.id ,'idUser': app.user.id,'route':'UNUSED'}) }}"
+                        >Modifier</a>
+                        <a href="{{ path('sortie_inscriptionEtAction',{'action': 'annuler','idSortie': sortie.id ,'idUser': app.user.id,'route':'acceuil'}) }}"
+                        >Annuler</a>
+
+                    {% else %}
+
+                        {% if jesuisinscrit %}
+                            <a href="{{ path('sortie_inscriptionEtAction',{'action': 'desinscrire','idSortie': sortie.id ,'idUser': app.user.id,'route':'UNUSED'}) }}"
+                            >Se desister</a>
+                        {% elseif enabled %}
+                            <a href="{{ path('sortie_inscriptionEtAction',{'action': 'inscrire','idSortie': sortie.id ,'idUser': app.user.id,'route':'UNUSED'}) }}"
+                            >S'inscrire</a>
+                        {% endif %}
+
+                    {% endif %}
+                </td>
+
+            </tr>
         {% endfor %}
     </tbody>
 </table>

@@ -3,15 +3,17 @@
 {% block body %}
 <h2>Ajouter une sortie</h2>
     {{ form_start(formSortie) }}
+
     <div class="inline">
         <div>
             {% do formSortie.supprimer.setRendered() %}
             {% do formSortie.annuler.setRendered() %}
             {% do formSortie.ajouterLieu.setRendered() %}
+            {% do formSortie.duree.setRendered() %}
 
             {{ form_row(formSortie.nom) }}
             {{ form_row(formSortie.infosSortie) }}
-            {{ form_row(formSortie.duree) }}
+            {{ form_row(formSortie.dureeH) }}
             {{ form_row(formSortie.nbInscriptionsMax) }}
             {{ form_row(formSortie.dateHeureDebut) }}
             {{ form_row(formSortie.dateLimiteInscription) }}

@@ -5,12 +5,51 @@
 {% endblock %}
 
 {% block body %}
-    <h2>Votre sortie "{{ sortieAffichee.nom }}" </h2>
-    <div>Infos :</div>
-    <div>
-        {{ sortieAffichee.infosSortie }}
+    {% set jesuisinscrit = false %}
+    {% set messageInscrit = "" %}
+    {% set enabled = true %}
+    {% set colorgrey ="" %}
+
+    {% if sortieAffichee.participants.contains(app.user) %}
+        {% set jesuisinscrit = true %}
+        {% set messageInscrit = "Oui" %}
+    {% endif %}
+
+    {% if sortieAffichee.participants.count == sortieAffichee.nbInscriptionsMax %}
+        {% set enabled = false %}
+        {% set colorgrey = "color : grey" %}
+    {% endif %}
+
+    {% set placesRestantes = (sortieAffichee.nbInscriptionsMax-sortieAffichee.participants.count)%}
+
+
+    <div class="container">
+
+        <h2>Votre sortie "{{ sortieAffichee.nom }}" </h2>
+        <div>Infos :</div>
+        <div class="col-md-6">{{ sortieAffichee.infosSortie }}</div>
+        <div>Etat : Sortie {{ sortieAffichee.unEtat.libelle }}</div>
+        <div>Duree : {{ duree | format_datetime(pattern="HH 'heures ' mm 'minutes '")}}</div>
+
+        <div style="{{ colorgrey }}">Il y a {{ placesRestantes }} places restantes !</div>
+
+        <div class="inline">
+        {% if app.user.id is same as(sortieAffichee.organisateur.id)  or is_granted('ROLE_ADMIN') %}
+            <button><a href="{{ path('sortie_modifier',{'id' : sortieAffichee.id}) }}">Modifier</a></button>
+                {% if sortieAffichee.unEtat.libelle is same as("Créée") %}
+                    <button><a href="{{ path('sortie_inscriptionEtAction',{'action': 'publier','idSortie': sortieAffichee.id ,'idUser': app.user.id,'route':'acceuil'}) }}">Publier</a></button>
+                {% endif %}
+            <button><a href="{{ path('sortie_inscriptionEtAction',{'action': 'annuler','idSortie': sortieAffichee.id ,'idUser': app.user.id,'route':'acceuil'}) }}">Annuler</a></button>
+        {% else %}
+                {% if jesuisinscrit %}
+                    <button><a href="{{ path('sortie_inscriptionEtAction',{'action': 'desinscrire','idSortie': sortieAffichee.id ,'idUser': app.user.id,'route':'UNUSED'}) }}">Se desister</a></button>
+                {% elseif enabled %}
+                    <button><a href="{{ path('sortie_inscriptionEtAction',{'action': 'inscrire','idSortie': sortieAffichee.id ,'idUser': app.user.id,'route':'UNUSED'}) }}">S'inscrire</a></button>
+                {% endif %}
+        {% endif %}
+        </div>
+
     </div>
-    <p>Etat : Sortie {{ sortieAffichee.unEtat.libelle }}</p>
-    <button><a href="{{ path('sortie_modifier',{'id' : sortieAffichee.id}) }}">Modifier</a></button>
+
 {% endblock %}
 
