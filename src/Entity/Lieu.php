@@ -49,6 +49,11 @@ class Lieu
      */
     private $ville;
 
+    /**
+     * @var
+     */
+    private $villeAjout;
+
     public function __construct()
     {
         $this->sortie = new ArrayCollection();
@@ -148,4 +153,21 @@ class Lieu
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getVilleAjout()
+    {
+        return $this->villeAjout;
+    }
+
+    /**
+     * @param mixed $villeAjout
+     */
+    public function setVilleAjout($villeAjout): void
+    {
+        $this->villeAjout = $villeAjout;
+    }
+
 }

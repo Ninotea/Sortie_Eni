@@ -19,8 +19,13 @@ class DonneeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $DateDuJour = new DateTime();
-        $DateDuJour->setTime('12','0');
-        $FDateDuJour = date_format($DateDuJour,'Y-m-d'.'\T'.'H:00');
+        $JourDDJ = (int) date_format($DateDuJour,'d');
+        $MoisDDJ = (int) date_format($DateDuJour,'m');
+        $AnneeDDJ = (int) date_format($DateDuJour,'Y');
+        $MinDDJ = new DateTime();
+        $MaxDDJ = new DateTime();
+        $MinDDJ->setDate($AnneeDDJ,$MoisDDJ-2,$JourDDJ-15);
+        $MaxDDJ->setDate($AnneeDDJ,$MoisDDJ+2,$JourDDJ+15);
 
         $builder
             ->add('mot', TextType::class,[
@@ -40,7 +45,7 @@ class DonneeType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'id' => 'inputDateMin',
-                    'value'=>$FDateDuJour
+                    'value'=>date_format($MinDDJ,'Y-m-d'.'\T'.'12:00')
                     ],
             ])
             ->add('dateMax', DateTimeType::class,[
@@ -48,7 +53,7 @@ class DonneeType extends AbstractType
                 'widget' => 'single_text',
                 'required' => false,
                 'attr' => ['id' => 'inputDateMax',
-                    'value'=>$FDateDuJour
+                    'value'=>date_format($MaxDDJ,'Y-m-d'.'\T'.'12:00')
                 ],
             ])
             ->add('organisateurTrue', CheckboxType::class,[

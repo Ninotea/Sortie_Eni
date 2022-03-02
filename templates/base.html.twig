@@ -6,10 +6,9 @@
         <link rel="stylesheet" href="{{ asset('CSS/GlobalStyle.css') }}">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-
     </head>
     <body>
-    <script src="{{ asset('Javascript/app.js') }}"></script>
+
         <div class="container">
             <header>
                 <div class="inline">
@@ -18,6 +17,7 @@
                         {% include 'inc/nav.html.twig' %}
                     </div>
                 </div>
+
             </header>
 
             {# read and display all flash messages #}
@@ -34,6 +34,8 @@
             </main>
 
             <footer>
+                {% block script %}
+                {% endblock %}
             </footer>
         </div>
     </body>

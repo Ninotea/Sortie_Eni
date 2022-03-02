@@ -23,17 +23,13 @@
 
     {% include 'sortie/_affichageSortie.html.twig' with {sorties: sorties , currentUser: currentUser} only %}
 
-    {% if submitted == false %}
-        <script>
-            var checkboxs, index;
-            checkboxs = document.getElementsByClassName("checkbox");
-            for (index = 0; index < checkboxs.length; ++index) {
-                checkboxs[index].setAttribute('checked', 'checked');
-            }
-            var datemin = document.getElementById('inputDateMin');
-            var datemax = document.getElementById('inputDateMax');
-            console.log(datemin.value)
-        </script>
-    {% endif %}
 
+
+
+{% endblock %}
+
+{% block script %}
+    {% if submitted == false %}
+        <script src="{{ asset('javascript/module/_checker.js') }}"></script>
+    {% endif %}
 {% endblock %}

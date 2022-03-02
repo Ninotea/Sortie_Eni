@@ -20,7 +20,7 @@ class LieuType extends AbstractType
                 'label'=>'Nom du lieu : '
             ])
             ->add('rue',TextType::class,[
-                'label'=>'Rue : '
+                'label'=>'Adresse : '
             ])
             ->add('latitude',TextType::class,[
                 'label'=>'Latitude : '
@@ -32,9 +32,10 @@ class LieuType extends AbstractType
                 'class'=> Ville::class,
                 'choice_label'=>'nom'
             ])
-            ->add('ajouter', SubmitType::class,[
-                'attr'=>['class'=>'soumission'],
-                'label_format'=>'Ajouter le lieu !'
+            ->add('villeAjout',EntityType::class,[
+                'class'=> Ville::class,
+                'choice_label'=>'nom',
+                'label'=> 'Ville ou se situe le lieu : '
             ])
         ;
     }

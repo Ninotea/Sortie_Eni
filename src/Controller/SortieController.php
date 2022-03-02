@@ -5,14 +5,20 @@ namespace App\Controller;
 use App\Donnee\DonneeSorties;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
+use App\Entity\Ville;
 use App\Form\DonneeType;
 use App\Form\LieuType;
 use App\Form\SortieType;
 use App\Repository\EtatRepository;
+use App\Repository\LieuRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
+use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use mysql_xdevapi\Exception;
+use phpDocumentor\Reflection\Types\Array_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,7 +38,9 @@ class SortieController extends AbstractController
                             EntityManagerInterface $entityManager,
                             EtatRepository $etatRepository,
                             UserInterface $user,
-                            ParticipantRepository $participantRepository)
+                            ParticipantRepository $participantRepository,
+                            LieuRepository $lieuRepository,
+                            VilleRepository $villeRepository)
     {
         $sortie = new Sortie();
         $formSortie = $this->createForm(SortieType::class, $sortie);
@@ -43,6 +51,68 @@ class SortieController extends AbstractController
         $lieu = new Lieu();
         $formLieu = $this->createForm(LieuType::class,$lieu);
         $formLieu->handleRequest($request);
+
+
+        /* ###################
+         * AJAX
+         */###################
+        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1)
+        {
+            $idVille = $request->request->get('idville');
+            $idLieu = $request->request->get('idlieu');
+            $ajoutLieu = $request->request->get('ajout');
+
+            if($idVille != null){
+                $ville = $villeRepository->find($idVille);
+                $lieux = $lieuRepository->findBy(['ville'=>$ville]);
+                $tableau = [];
+                foreach ($lieux as $unlieu){
+                    $tableau[] = [
+                        'id'=>$unlieu->getId(),
+                        'nom'=>$unlieu->getNom(),
+                        'rue'=>$unlieu->getRue(),
+                        'cp'=>$unlieu->getVille()->getCodePostal()
+                    ];
+                }
+                return new JsonResponse($tableau);
+            }
+            if($idLieu != null ){
+                $lieu = $lieuRepository->find($idLieu);
+                $tableauLieu = [
+                    'id'=>$lieu->getId(),
+                    'nom'=>$lieu->getNom(),
+                    'rue'=>$lieu->getRue(),
+                    'cp'=>$lieu->getVille()->getCodePostal()
+                ];
+                return new JsonResponse($tableauLieu);
+            }
+            if($ajoutLieu != null){
+                $idVille = $request->request->get('ville');
+                $ville = $villeRepository->find($idVille);
+                $nom = $request->request->get('nom');
+                $rue = $request->request->get('rue');
+                $lat = $request->request->get('lat');
+                $long = $request->request->get('long');
+
+                $lieu = new Lieu();
+                $lieu->setVille($ville);
+                $lieu->setNom($nom);
+                $lieu->setRue($rue);
+                $lieu->setLatitude($lat);
+                $lieu->setLongitude($long);
+
+                $entityManager->persist($lieu);
+                $entityManager->flush();
+
+                $tableau = ['nouvelle ID'=>$lieu->getId(), 'nom de lieu'=>$lieu->getNom()];
+
+                return new JsonResponse($tableau);
+            }
+            return new JsonResponse(["resutlat KO"]);
+        }
+        /* ###################
+         *  FIN AJAX
+         */###################
 
         if ($formSortie->isSubmitted() && $formSortie->isValid()) {
 
@@ -90,15 +160,13 @@ class SortieController extends AbstractController
         ]);
     }
 
-
-
     /**
      * @Route("/detail/{id}", name="detail")
      */
     public function detail(int $id, SortieRepository $sortieRepository): Response
     {
         $sortie = $sortieRepository->find($id);
-        $dureeH = $sortie->getDuree()/60;
+        $dureeH = (int) round($sortie->getDuree()/60 , 1);
         $dureeM = $sortie->getDuree()%60;
         $duree = "$dureeH:$dureeM";
         return $this->render('sortie/detail_sortie.html.twig',[
@@ -144,32 +212,6 @@ class SortieController extends AbstractController
             'sortieModif'=> $sortie
         ]);
     }
-
-
-
-    /**
-     * @Route("/ajout_lieu", name="lieu")
-     */
-    public function ajouterLieu(Request $request,
-                                EntityManagerInterface $entityManager): Response
-    {
-        $lieu = new Lieu();
-        $formLieu = $this->createForm(LieuType::class,$lieu);
-        $formLieu->handleRequest($request);
-
-        if ($formLieu->isSubmitted() && $formLieu->isValid()) {
-
-            $entityManager->persist($lieu);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('sortie_create');
-        }
-
-        return $this->render('sortie/ajout_lieu.html.twig',[
-            'formLieu' => $formLieu->createView()
-        ]);
-    }
-
 
 
     /**
@@ -310,3 +352,4 @@ class SortieController extends AbstractController
     }
 
 }
+
