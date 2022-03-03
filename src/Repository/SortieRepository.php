@@ -70,6 +70,13 @@ class SortieRepository extends ServiceEntityRepository
                     ->andWhere('etat.libelle NOT LIKE :etatOuverte')
                     ->setParameter('etatOuverte', 'ouverte' );
             }
+            if(!empty($donnees->dateMin) && !empty($donnees->dateMax))
+            {
+                $query = $query
+                    ->andWhere('sorty.dateHeureDebut BETWEEN :datemin AND :datemax')
+                    ->setParameter('datemin',$donnees->dateMin)
+                    ->setParameter('datemax',$donnees->dateMax);
+            }
 
             /*
              * FILTRE ORGANISATEUR
@@ -116,6 +123,40 @@ class SortieRepository extends ServiceEntityRepository
                     ->setParameter('currentUser', $currentUser );
             }// où Je suis inscrit ou pas inscrit (tout) donc on filtre pas
 
+        $query->addOrderBy('sorty.dateHeureDebut','ASC');
+
         return $query;
+    }
+
+    public function updateEtatSortie(EtatRepository $etatRepository){
+        $dateDuJour = new \DateTime();
+        $JourDuJour = (int) date_format($dateDuJour,'d');
+        $MoisDuJour = (int) date_format($dateDuJour,'m');
+        $AnneeDuJour = (int) date_format($dateDuJour,'Y');
+        $dateMoinsUnMois = new \DateTime();
+        $dateMoinsUnMois->setDate($AnneeDuJour,$MoisDuJour-1,$JourDuJour);
+        $etatpassee = $etatRepository->findOneBy(['libelle'=>'Passée']);
+        $etatCloturee = $etatRepository->findOneBy(['libelle'=>'Clôturée']);
+
+        $query = $this
+        ->createQueryBuilder('etatPassee')
+            ->update('App:Sortie','sorty')
+            ->set('sorty.unEtat',$etatpassee->getId())
+            ->where('sorty.dateHeureDebut <= :datedujour')
+            ->setParameter('datedujour',$dateDuJour)
+            ->getQuery();
+
+        $query->execute();
+
+        $query = $this
+            ->createQueryBuilder('etatCloture')
+            ->update('App:Sortie','sorty')
+            ->set('sorty.unEtat',$etatCloturee->getId())
+            ->where('sorty.dateHeureDebut <= :dateMoinsUnMois')
+            ->setParameter('dateMoinsUnMois',$dateMoinsUnMois)
+            ->getQuery();
+
+        $query->execute();
+
     }
 }
