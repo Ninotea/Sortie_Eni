@@ -26,11 +26,12 @@ function afficherLieu(data){
     // Selection et vidage de la zone d'affichage de lieu
     let zoneAffichage = document.querySelector('.affichage-adresse')
     $('.listeLieux').remove()
+    $('.listeLieuxSelect').remove()
 
     // Création de la balise Select
     let baliseSelect = document.createElement('select')
     baliseSelect.setAttribute('id','listeLieux')
-    baliseSelect.setAttribute('class','listeLieux')
+    baliseSelect.setAttribute('class','listeLieuxSelect')
     baliseSelect.setAttribute('name','listeLieux')
 
     //création du label de la balise Select

@@ -5,7 +5,7 @@ const champDuree = $('#sortie_dureeH')
 const champNbInscri = $('#sortie_nbInscriptionsMax')
 const champDateDeb = $('#sortie_dateHeureDebut')
 const champDateFinInscr = $('#sortie_dateLimiteInscription')
-const champLieux = $('#listeLieux')
+
 
 const btnEnregistrer = $('#sortie_enregistrer')
 const btnPublier = $('#sortie_publier')
@@ -45,8 +45,11 @@ function verifierChamps(event) {
         message += 'Renseignez une date et une heure de début de sortie utlérieur à la date et heure du jour.\n \n'
         erreur = true
     }
-
-
+    let champLieux = $('.listeLieuxSelect')
+    if(champLieux.val() === null){
+        message += 'Le lieu doit être renseigner ! (vous pouvez en ajouter un).\n \n'
+        erreur = true
+    }
     if(erreur){
         alert(message)
         event.preventDefault();
@@ -60,4 +63,24 @@ btnEnregistrer.click(function (event) {
     verifierChamps(event);
 })
 
+// PAGE D'ACCEUIL
+const btnRechercher = $('#rechercher')
+const champDateMinAcceuil = $('#dateMin')
+const champDateMaxAcceuil = $('#dateMax')
 
+function verifierDateAcceuil(event) {
+    let erreur = false;
+    let message = ""
+    if(champDateMinAcceuil.val() >= champDateMaxAcceuil.val()){
+        message += 'Attention à l\'ordre des dates renseignées, la première ne peut pas etre ultérieur à la deuxième.\n \n'
+        erreur = true
+    }
+    if(erreur){
+        alert(message)
+        event.preventDefault();
+    }
+}
+console.log('js lié')
+btnRechercher.click(function (event){
+    verifierDateAcceuil(event);
+})

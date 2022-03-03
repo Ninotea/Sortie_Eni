@@ -4,22 +4,42 @@
 
 {% block body %}
     <h2>Acceuil</h2>
-    {{ form_start(formulaire , {'attr': {'id': 'formulaireRecherche'}}) }}
-        {{ form_row(formulaire.mot) }}
-        {{ form_row(formulaire.campus) }}
-        {{ form_row(formulaire.dateMin) }}
-        {{ form_row(formulaire.dateMax) }}
-        {{ form_row(formulaire.inscritFalse) }}
-        {{ form_row(formulaire.inscritTrue) }}
-        {{ form_row(formulaire.organisateurFalse) }}
-        {{ form_row(formulaire.organisateurTrue) }}
-        {{ form_row(formulaire.passee) }}
-        {{ form_row(formulaire.ouverte) }}
-        {{ form_row(formulaire.creee) }}
-        {{ form_row(formulaire.rechercher) }}
-    {{ form_end(formulaire) }}
+    <div class="row justify-content-center">
+        <div class="col-10 border border-success">
+            {{ form_start(formulaire , {'attr': {'id': 'formulaireRecherche'}}) }}
+            <div class="row d-flex justify-content-around border border-success">
+                {{ form_row(formulaire.campus) }}
+                {{ form_row(formulaire.mot) }}
+            </div>
+            <div class="row d-flex justify-content-around border border-success">
+                {{ form_row(formulaire.dateMin) }}
+                {{ form_row(formulaire.dateMax) }}
+            </div>
+            <div class="col-10 justify-content-center border border-success">
+                <div class="row d-flex border border-success">
+                    <div class="d-inline mx-4 w-50"> {{ form_widget(formulaire.inscritFalse) }}{{ form_label(formulaire.inscritFalse) }}</div>
+                    <div class="d-inline mx-4"> {{ form_widget(formulaire.inscritTrue) }}{{ form_label(formulaire.inscritTrue) }}</div>
+                </div>
+                <div class="row d-flex  border border-success">
+                    <div class="row d-inline mx-4 w-50"> {{ form_widget(formulaire.organisateurFalse) }}{{ form_label(formulaire.organisateurFalse) }}</div>
+                    <div class="row d-inline mx-4"> {{ form_widget(formulaire.organisateurTrue) }}{{ form_label(formulaire.organisateurTrue) }}</div>
+                </div>
+                <div class="row d-flex border border-success">
+                    <div class="row d-inline mx-4 w-25"> {{ form_widget(formulaire.passee) }}{{ form_label(formulaire.passee) }}</div>
+                    <div class="row d-inline mx-3 "> {{ form_widget(formulaire.ouverte) }}{{ form_label(formulaire.ouverte) }}</div>
+                    <div class="row d-inline mx-3"> {{ form_widget(formulaire.creee) }}{{ form_label(formulaire.creee) }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-2">
+            {{ form_row(formulaire.rechercher, {'attr': {'class': 'btn'}}) }}
+            {{ form_end(formulaire) }}
 
-    <button><a href="{{ path('sortie_create') }}">Ajouter une sortie</a></button>
+            <button><a href="{{ path('sortie_create') }}">Ajouter une sortie</a></button>
+        </div>
+    </div>
+
+
 
     {% include 'sortie/_affichageSortie.html.twig' with {sorties: sorties , currentUser: currentUser} only %}
 
@@ -31,5 +51,7 @@
 {% block script %}
     {% if submitted == false %}
         <script src="{{ asset('javascript/module/_checker.js') }}"></script>
+        <script type="module" src="{{ asset('javascript/ControleChamps.js') }}"></script>
+        <script src="{{ asset('javascript/jquery-3.3.1.js') }}"></script>
     {% endif %}
 {% endblock %}
