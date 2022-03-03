@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Participant;
+use App\Form\ProfileType;
 use App\Form\RegistrationFormType;
+use App\Repository\EtatRepository;
 use App\Repository\ParticipantRepository;
+use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +32,7 @@ class ParticipantController extends AbstractController
         ]);
     }
 
-    
+
     /**
      * @Route("/profil", name="participant_profil")
      */
@@ -44,7 +47,7 @@ class ParticipantController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
-             return $this->redirectToRoute('main_acceuil');
+            return $this->redirectToRoute('main_acceuil');
         }
 
         // get the login error if there is one
@@ -66,32 +69,73 @@ class ParticipantController extends AbstractController
     /**
      * @Route("/modification/{id}", name="profil_modifier")
      */
-    public function gestionProfil(int $id,
-                         EntityManagerInterface $entityManager,
-                         ParticipantRepository $participantRepository,
-                         Request $request): Response
+    public function modifierProfil(int                    $id,
+                                  EntityManagerInterface $entityManager,
+                                  ParticipantRepository  $participantRepository,
+                                  Request                $request): Response
     {
         $participant = $participantRepository->find($id);
-          $form = $this->createForm(RegistrationFormType::class, $participant);
-          $form->handleRequest($request);
+        $form = $this->createForm(RegistrationFormType::class, $participant);
+        $form->handleRequest($request);
 
-          if ($form->isSubmitted() && $form->isValid())
-          {
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($participant);
+            $entityManager->flush();
 
-              //TODO regarder la méthode de tri des boutons et executer la bonne fonction SQL en fonction du bouton
-
-              //TODO methode supprimer
-
-              //TODO methode desactiver
-
-
-              //TODO persist et flush le participant "MODIFIER"
-                  return $this->redirectToRoute('participant_profil_id', [
-                      'id'=>$participant->getId()
-                  ]);
-          }
-          return $this->render('participant/modificationProfil.html.twig',
-              ['form'=>$form->createView()]);
+            //TODO persist et flush le participant "MODIFIER"
+            return $this->redirectToRoute('participant_profil_id', [
+                'id' => $participant->getId()
+            ]);
+        }
+        return $this->render('participant/modificationProfil.html.twig',
+            ['form' => $form->createView()]);
 
     }
+
+    /*/**
+     * @Route("/{action}/{idUtilisateur}", name="modification_profil")
+     */
+    /*public function modifierProfil (int $id,
+                                    participantRepository $participantRepository,
+                                    EntityManagerInterface $entityManager,
+                                    EtatRepository $etatRepository,
+                                    Request $request): Response
+{
+    $participant = $participantRepository->find($id);
+    $form = $this->createForm(SortieType::class, $participant);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid())
+    {
+        $button = $form->getClickedButton()->getName() ;
+        switch ($button)
+        {
+            case "modifier" :
+                $etat = $etatRepository->findOneBy(['libelle'=>'Ouverte']);
+                $participant->setUnEtat($etat);
+                $this->addFlash('success','Utilisateur modifié !');
+                break;
+            case "desactiver" :
+                $etat = $etatRepository->findOneBy(['libelle'=>'Créée']);
+                $participant->setUnEtat($etat);
+                $this->addFlash('success','Utilisateur desactivé !');
+                break;
+            case "supprimer" :
+                $this->addFlash('success','utilisateur supprimé !');
+                $entityManager->remove($participant);
+                $entityManager->flush();
+                return $this->redirectToRoute('main_acceuil');
+
+        }
+        $entityManager->persist($participant);
+        $entityManager->flush();
+
+        return new response("Profil modifié");
+
+    }*/
+
+    /*eturn $this->render('sortie/modificationProfil.html.twig',[
+        'participantForm' => $form->createView(),
+        'participantModif'=> $participant
+    ]);*/
 }

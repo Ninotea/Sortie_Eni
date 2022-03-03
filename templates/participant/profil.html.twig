@@ -3,11 +3,14 @@
 {% block body %}
 
     {% if participant is defined %}
+
+        <h1>{{ participant.pseudo }}</h1>
         <p>Nom : {{ participant.nom }}</p>
         <p>Prénom : {{ participant.prenom }}</p>
         <p>E-mail : {{ participant.email }}</p>
         <p>telephone : {{ participant.telephone }}</p>
     {% else %}
+        <h1>{{ app.user.pseudo }}</h1>
         <p>Nom : {{ app.user.nom }}</p>
         <p>Prénom : {{ app.user.prenom }}</p>
         <p>E-mail : {{ app.user.email }}</p>
