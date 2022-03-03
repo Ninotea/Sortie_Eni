@@ -136,10 +136,6 @@ class SortieController extends AbstractController
                     $etatNom = 'Créée';
                     $message = 'Sortie enregistrée !';
                     break;
-                case "ajouterLieu" :
-                    return $this->redirectToRoute('sortie_lieu',[
-                        'donneesSortie'=>$sortie
-                    ]);
             }
 
             $this->addFlash('success',$message);
@@ -220,9 +216,10 @@ class SortieController extends AbstractController
     public function afficherSortie(SortieRepository $sortieRepository,
                                    Request $request,
                                    UserInterface $user,
-                                   ParticipantRepository $participantRepository):Response
+                                   ParticipantRepository $participantRepository,
+                                    EtatRepository $etatRepository):Response
     {
-        //$this->actualiserEtat(); TODO: actualiser les etats dans la BDD en fonction de la date du jour
+        $sortieRepository->updateEtatSortie($etatRepository);
         $donnees = new DonneeSorties();
         $currentUser = $participantRepository->findOneBy(['email'=>$user->getUserIdentifier()]);
         //gestion page apginator ICI

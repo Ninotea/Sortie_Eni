@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Entity\Campus;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
 use DateTime;
@@ -15,13 +14,12 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use function Sodium\add;
 
 class SortieType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $DateDuJour = new DateTime('now');
+        $DateDuJour = new DateTime();
         $DateDuJour->setTime('12','0');
         $FDateDuJour = date_format($DateDuJour,'Y-m-d'.'\T'.'H:00');
 
