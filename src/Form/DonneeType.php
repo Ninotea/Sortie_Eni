@@ -43,6 +43,7 @@ class DonneeType extends AbstractType
                 'html5' => true,
                 'widget' => 'single_text',
                 'required' => false,
+                'label'=> 'De : ',
                 'attr' => [
                     'id' => 'inputDateMin',
                     'value'=>date_format($MinDDJ,'Y-m-d'.'\T'.'12:00')
@@ -52,28 +53,29 @@ class DonneeType extends AbstractType
                 'html5' => true,
                 'widget' => 'single_text',
                 'required' => false,
+                'label'=> ' à : ',
                 'attr' => ['id' => 'inputDateMax',
                     'value'=>date_format($MaxDDJ,'Y-m-d'.'\T'.'12:00')
                 ],
             ])
             ->add('organisateurTrue', CheckboxType::class,[
                 'required' => false,
-                'label' => "dont je suis l'organisateur",
+                'label' => "dont je suis l'organisateur ",
                 'attr'=>['class'=>'checkbox']
             ])
             ->add('organisateurFalse', CheckboxType::class,[
                 'required' => false,
-                'label' => "dont je ne suis pas l'organisateur",
+                'label' => "dont je ne suis pas l'organisateur ",
                 'attr'=>['class'=>'checkbox']
             ])
             ->add('inscritTrue', CheckboxType::class,[
                 'required' => false,
-                'label' => "auxquelles je suis inscrit",
+                'label' => "auxquelles je suis inscrit ",
                 'attr'=>['class'=>'checkbox']
             ])
             ->add('inscritFalse', CheckboxType::class,[
                 'required' => false,
-                'label' => "auxquelles je ne suis pas inscrit",
+                'label' => "auxquelles je ne suis pas inscrit ",
                 'attr'=>['class'=>'checkbox']
             ])
             ->add('passee', CheckboxType::class,[

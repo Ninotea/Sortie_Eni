@@ -1,8 +1,4 @@
-.inline{
-    display: flex;
-    flex-direction: row;
+a {
+    color: inherit;
 }
 
-.inline *{
-    margin :3px;
-}

@@ -50,9 +50,9 @@ function ajouterLieu(){
         url:"create",
         data: datasend,
         success:function (data){
-            console.log(data)
-            fermerFormulaire()
-            gestionAdresse()
+            console.log(data);
+            fermerFormulaire();
+            gestionAdresse();
         }
     })
 }
