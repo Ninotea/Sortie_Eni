@@ -1,14 +1,14 @@
-<table class="table table-sm">
+<table class="table table-sm ">
     <thead class="thead-dark">
     <tr>
-        <th scope="col">Nom de la sortie</th>
-        <th scope="col">Date de la sortie</th>
-        <th scope="col">Clôture inscription</th>
-        <th scope="col">Inscrits / Places</th>
-        <th scope="col">Etat</th>
-        <th scope="col">Inscrit</th>
-        <th scope="col">Organisateur</th>
-        <th scope="col">Actions</th>
+        <th scope="col" class="text-center">Nom de la sortie</th>
+        <th scope="col" class="text-center">Date de la sortie</th>
+        <th scope="col" class="text-center">Clôture inscription</th>
+        <th scope="col" class="text-center">Inscrits / Places</th>
+        <th scope="col" class="text-center">Etat</th>
+        <th scope="col" class="text-center">Inscrit</th>
+        <th scope="col" class="text-center">Organisateur</th>
+        <th scope="col" class="text-center">Actions</th>
     </tr>
     </thead>
     <tbody class="tbody-light overflow-auto" >
@@ -31,35 +31,37 @@
 
             <tr>
                 <th scope="row">{{ sortie.nom  }}</th>
-                <td>{{ sortie.dateHeureDebut | format_datetime('short', 'none', locale='fr')}}</td>
-                <td>{{ sortie.dateLimiteInscription | format_datetime('short', 'none', locale='fr')}}</td>
-                <td style="{{ colorgrey }}">{{sortie.participants.count}}/{{ sortie.nbInscriptionsMax }}</td>
-                <td>{{ sortie.unEtat}}</td>
-                <td>{{ messageInscrit }}</td>
-                <td>{{ sortie.organisateur.pseudo }}</td>
+                <td class="text-center">{{ sortie.dateHeureDebut | format_datetime('short', 'none', locale='fr')}}</td>
+                <td class="text-center">{{ sortie.dateLimiteInscription | format_datetime('short', 'none', locale='fr')}}</td>
+                <td  class="text-center" style="{{ colorgrey }}">{{sortie.participants.count}}/{{ sortie.nbInscriptionsMax }}</td>
+                <td class="text-center">{{ sortie.unEtat}}</td>
+                <td class="text-center">{{ messageInscrit }}</td>
+                <td class="text-center">{{ sortie.organisateur.pseudo }}</td>
                 <!-- TD des Actions -->
-                <td>
-                    <a href="{{ path('sortie_detail',{'id': sortie.id}) }}">Afficher</a>
+                <td class="text-center">
+                    <a class="btn-xs btn-secondary rounded px-1" href="{{ path('sortie_detail',{'id': sortie.id}) }}">Afficher</a>
 
                     {% if sortie.organisateur.id is same as(app.user.id) %}
 
                         {% if sortie.unEtat.libelle is same as("Créée") %}
-                            <a href="{{ path('sortie_inscriptionEtAction',{'action': 'publier','idSortie': sortie.id ,'idUser': app.user.id,'route':'acceuil'}) }}"
+                            <a class="btn-xs btn-secondary rounded px-1" href="{{ path('sortie_inscriptionEtAction',{'action': 'publier','idSortie': sortie.id ,'idUser': app.user.id,'route':'acceuil'}) }}"
                             >Publier </a>
                         {% endif %}
 
-                        <a href="{{ path('sortie_inscriptionEtAction',{'action': 'modifier','idSortie': sortie.id ,'idUser': app.user.id,'route':'UNUSED'}) }}"
+                        <a class="btn-xs btn-secondary rounded px-1" href="{{ path('sortie_inscriptionEtAction',{'action': 'modifier','idSortie': sortie.id ,'idUser': app.user.id,'route':'UNUSED'}) }}"
                         >Modifier</a>
-                        <a href="{{ path('sortie_inscriptionEtAction',{'action': 'annuler','idSortie': sortie.id ,'idUser': app.user.id,'route':'acceuil'}) }}"
+                        {% if sortie.unEtat.libelle is not same as("Annulée")%}
+                        <a class="btn-xs btn-secondary rounded px-1" href="{{ path('sortie_inscriptionEtAction',{'action': 'annuler','idSortie': sortie.id ,'idUser': app.user.id,'route':'acceuil'}) }}"
                         >Annuler</a>
+                        {% endif %}
 
                     {% else %}
 
                         {% if jesuisinscrit %}
-                            <a href="{{ path('sortie_inscriptionEtAction',{'action': 'desinscrire','idSortie': sortie.id ,'idUser': app.user.id,'route':'UNUSED'}) }}"
+                            <a class="btn-xs btn-secondary rounded px-1" href="{{ path('sortie_inscriptionEtAction',{'action': 'desinscrire','idSortie': sortie.id ,'idUser': app.user.id,'route':'UNUSED'}) }}"
                             >Se desister</a>
                         {% elseif enabled %}
-                            <a href="{{ path('sortie_inscriptionEtAction',{'action': 'inscrire','idSortie': sortie.id ,'idUser': app.user.id,'route':'UNUSED'}) }}"
+                            <a class="btn-xs btn-secondary rounded px-1" href="{{ path('sortie_inscriptionEtAction',{'action': 'inscrire','idSortie': sortie.id ,'idUser': app.user.id,'route':'UNUSED'}) }}"
                             >S'inscrire</a>
                         {% endif %}
 

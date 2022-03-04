@@ -1,4 +1,28 @@
 a {
     color: inherit;
 }
+.myColor{
+    background-color: #44A682;
+    border: 2px solid #4f8690;
+    box-shadow: 0 .125rem .25rem black;
+}
+.btn{
+    background-color: #f68751;
+    border: 2px solid #F2811D;
+    color: #4f8690;
+    box-shadow: 0 .125rem .25rem black;
+    margin: 2px;
+}
 
+.logo{
+    height: 8rem;
+}
+
+.bandeau{
+
+}
+
+.imageLogo{
+    margin-top: -2rem;
+    height:220%;
+}

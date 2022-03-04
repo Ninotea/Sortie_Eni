@@ -3,18 +3,19 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="stylesheet" href="{{ asset('CSS/GlobalStyle.css') }}">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="{{ asset('CSS/GlobalStyle.css') }}">
+        <link rel="icon" type="image/gif" href="{{ asset('Images/Logo/Logo.png') }}">
     </head>
     <body>
 
         <div class="container">
             <header>
-                <div class="inline">
-                    <h1>SORTIR.COM</h1>
-                    <div >
-                        {% include 'inc/nav.html.twig' %}
+                <div class="bandeau d-flex navbar navbar-light bg-light">
+                    <div class="logo">
+                        <img class="imageLogo"  src="{{ asset('Images/Logo/Logo.png') }}" alt="Logo">
                     </div>
+                        {% include 'inc/nav.html.twig' %}
                 </div>
             </header>
 

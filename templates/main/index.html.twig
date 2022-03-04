@@ -3,45 +3,46 @@
 {% block title %}Acceuil{% endblock %}
 
 {% block body %}
-    <h2>Acceuil</h2>
-    <div class="row justify-content-center">
-        <div class="col-10 border border-success">
+    <h2 class="text-center p-2">Acceuil</h2>
+    <div class="d-flex flex-column flex-lg-row justify-content-center">
+        <div class="myColor col-lg-8 m-2 p-4 rounded">
             {{ form_start(formulaire , {'attr': {'id': 'formulaireRecherche'}}) }}
-            <div class="row d-flex justify-content-around border border-success">
-                {{ form_row(formulaire.campus) }}
-                {{ form_row(formulaire.mot) }}
+            <div class="d-flex flex-column flex-md-row justify-content-between px-4">
+                <div class="d-inline">{{ form_label(formulaire.campus) }}{{ form_widget(formulaire.campus) }}</div>
+                <div class="d-inline">{{ form_label(formulaire.mot) }}{{ form_widget(formulaire.mot) }}</div>
             </div>
-            <div class="row d-flex justify-content-around border border-success">
-                {{ form_row(formulaire.dateMin) }}
-                {{ form_row(formulaire.dateMax) }}
+            <div class="d-flex flex-column flex-lg-row pt-1">
+                <div class="d-inline mx-4">{{ form_label(formulaire.dateMin) }}{{ form_widget(formulaire.dateMin) }}</div>
+                <div class="d-inline mx-4">{{ form_label(formulaire.dateMax) }}{{ form_widget(formulaire.dateMax) }}</div>
             </div>
-            <div class="col-10 justify-content-center border border-success">
-                <div class="row d-flex border border-success">
+            <div class="justify-content-center pt-1">
+                <div class="row d-flex">
                     <div class="d-inline mx-4 w-50"> {{ form_widget(formulaire.inscritFalse) }}{{ form_label(formulaire.inscritFalse) }}</div>
                     <div class="d-inline mx-4"> {{ form_widget(formulaire.inscritTrue) }}{{ form_label(formulaire.inscritTrue) }}</div>
                 </div>
-                <div class="row d-flex  border border-success">
+                <div class="row d-flex pt-1">
                     <div class="row d-inline mx-4 w-50"> {{ form_widget(formulaire.organisateurFalse) }}{{ form_label(formulaire.organisateurFalse) }}</div>
                     <div class="row d-inline mx-4"> {{ form_widget(formulaire.organisateurTrue) }}{{ form_label(formulaire.organisateurTrue) }}</div>
                 </div>
-                <div class="row d-flex border border-success">
-                    <div class="row d-inline mx-4 w-25"> {{ form_widget(formulaire.passee) }}{{ form_label(formulaire.passee) }}</div>
+                <div class="row d-flex pt-1">
+                    <div class="row d-inline mx-4 "> {{ form_widget(formulaire.passee) }}{{ form_label(formulaire.passee) }}</div>
                     <div class="row d-inline mx-3 "> {{ form_widget(formulaire.ouverte) }}{{ form_label(formulaire.ouverte) }}</div>
                     <div class="row d-inline mx-3"> {{ form_widget(formulaire.creee) }}{{ form_label(formulaire.creee) }}</div>
                 </div>
             </div>
         </div>
-        <div class="col-2">
-            {{ form_row(formulaire.rechercher, {'attr': {'class': 'btn'}}) }}
+        <div class="offset-lg-1 d-flex flex-column">
+            {{ form_row(formulaire.rechercher, {'attr': {'class': 'btn btn-light w-100 mt-2'}}) }}
             {{ form_end(formulaire) }}
 
-            <button><a href="{{ path('sortie_create') }}">Ajouter une sortie</a></button>
+            <button class="btn btn-light w-100 mt-2"><a href="{{ path('sortie_create') }}">Ajouter une sortie</a></button>
         </div>
     </div>
 
 
-
-    {% include 'sortie/_affichageSortie.html.twig' with {sorties: sorties , currentUser: currentUser} only %}
+    <div class="p-2">
+        {% include 'sortie/_affichageSortie.html.twig' with {sorties: sorties , currentUser: currentUser} only %}
+    </div>
 
 
 
