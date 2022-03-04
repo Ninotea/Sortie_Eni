@@ -1,14 +1,14 @@
-<nav class="inline">
+<nav class="d-flex flex-column flex-lg-row">
         {% if app.user %}
                 {% if is_granted("ROLE_ADMIN") %}
-                        <a href="{{ path('main_ville') }}">Villes</a>
-                        <a href="{{ path('main_campus') }}">Campus</a>
-                        <a href="{{ path('app_register') }}">Ajouter un profil</a>
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ path('main_ville') }}">Villes</a>
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ path('main_campus') }}">Campus</a>
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ path('app_register') }}">Ajouter un profil</a>
                 {% endif %}
-                <a href="{{ path('main_profil') }}">Mon profil</a>
-                <a href="{{ path('main_acceuil') }}">Acceuil</a>
-                <a href="{{ path('app_logout') }}">Se deconnecter</a>
+                <a class="btn btn-sm btn-outline-secondary" href="{{ path('main_profil') }}">Mon profil</a>
+                <a class="btn btn-sm btn-outline-secondary" href="{{ path('main_acceuil') }}">Acceuil</a>
+                <a class="btn btn-sm btn-outline-secondary" href="{{ path('app_logout') }}">Se deconnecter</a>
         {% else %}
-                <a href="{{ path('app_login') }}">Se connecter</a>
+                <a class="btn btn-sm btn-outline-secondary" href="{{ path('app_login') }}">Se connecter</a>
         {% endif %}
 </nav>
