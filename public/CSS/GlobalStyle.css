@@ -9,7 +9,7 @@ a {
 .btn{
     background-color: #f68751;
     border: 1px solid #4f8690;
-    color: #black;
+    color: black;
     box-shadow: 0 .125rem .25rem black;
     margin: 2px;
 }
