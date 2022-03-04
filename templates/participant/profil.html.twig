@@ -1,31 +1,36 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <div class="d-flex justify-content-center">
+        <div class="d-flex flex-column flex-lg-row myColor m-2 p-4 rounded ">
+            <div>
+                {% if participant is defined %}
+                    <h1 class="text-center p-2">{{ participant.pseudo }}</h1>
+                    <p>Nom : {{ participant.nom }}</p>
+                    <p>Prénom : {{ participant.prenom }}</p>
+                    <p>E-mail : {{ participant.email }}</p>
+                    <p>telephone : {{ participant.telephone }}</p>
+                {% else %}
+                    <h1 class="text-center p-2">{{ app.user.pseudo }}</h1>
+                    <p>Nom : {{ app.user.nom }}</p>
+                    <p>Prénom : {{ app.user.prenom }}</p>
+                    <p>E-mail : {{ app.user.email }}</p>
+                    <p>telephone : {{ app.user.telephone }}</p>
+                {% endif %}
+            </div>
+            <div class="d-flex flex-column justify-content-center">
+                {% if participant is defined %}
+                    {% set participantId = participant.id %}
+                {% elseif app.user.nom is not null %}
+                    {% set participantId = app.user.id %}
+                {% endif %}
 
-    {% if participant is defined %}
-
-        <h1>{{ participant.pseudo }}</h1>
-        <p>Nom : {{ participant.nom }}</p>
-        <p>Prénom : {{ participant.prenom }}</p>
-        <p>E-mail : {{ participant.email }}</p>
-        <p>telephone : {{ participant.telephone }}</p>
-    {% else %}
-        <h1>{{ app.user.pseudo }}</h1>
-        <p>Nom : {{ app.user.nom }}</p>
-        <p>Prénom : {{ app.user.prenom }}</p>
-        <p>E-mail : {{ app.user.email }}</p>
-        <p>telephone : {{ app.user.telephone }}</p>
-    {% endif %}
-
-    {% if participant is defined %}
-        {% set participantId = participant.id %}
-    {% elseif app.user.nom is not null %}
-        {% set participantId = app.user.id %}
-    {% endif %}
-
-    {% if is_granted("ROLE_ADMIN") or participant is not defined %}
-        <button><a href="{{ path('profil_modifier',{'id' : participantId}) }}">Modifier</a></button>
-    {% endif %}
+                {% if is_granted("ROLE_ADMIN") or participant is not defined %}
+                    <button class="btn m-2"><a href="{{ path('profil_modifier',{'id' : participantId}) }}">Modifier</a></button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 

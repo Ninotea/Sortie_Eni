@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<h2>Ajouter une sortie</h2>
+<h2 class="text-center p-2">Ajouter une sortie</h2>
     {{ form_start(formSortie) }}
 
-    <div class="inline" id="corp">
-        <div>
+    <div class="d-flex flex-column flex-lg-row justify-content-center m-2" id="corp">
+        <div class="myColor m-2 p-4 rounded ">
             {% do formSortie.supprimer.setRendered() %}
             {% do formSortie.annuler.setRendered() %}
             {% do formSortie.ajouterLieu.setRendered() %}
@@ -18,12 +18,12 @@
             {{ form_row(formSortie.nbInscriptionsMax) }}
             {{ form_row(formSortie.dateHeureDebut) }}
             {{ form_row(formSortie.dateLimiteInscription) }}
-            <div class="inline">
-                {{ form_row(formSortie.enregistrer) }}
-                {{ form_row(formSortie.publier) }}
+            <div class="d-flex flex-column flex-lg-row">
+                {{ form_row(formSortie.enregistrer,{attr : {class : 'btn'}}) }}
+                {{ form_row(formSortie.publier,{attr : {class : 'btn'}}) }}
             </div>
         </div>
-        <div class="form-lieu">
+        <div class="form-lieu myColor m-2 p-4 rounded">
             <p> Campus : {{ currentUser.leCampus }}  </p>
             {{ form_row(formLieu.ville,{attr : {class : 'lieu-ville'}}) }}
             <div class="affichage-adresse">
@@ -31,20 +31,24 @@
             </div>
             {{ form_end(formSortie) }}
 
-            <button id="btn_ajouterLieu">Ajouter un lieu</button>
+            <button class="btn" id="btn_ajouterLieu">Ajouter un lieu</button>
 
         </div>
     </div>
-    <div id="form-ajout-lieu" >
-        {{ form_start(formLieu) }}
+        <div class="d-flex justify-content-center" id="form-ajout-lieu" >
+            <div class="myColor m-2 p-4 rounded ">
+                <h3 class="text-center p-2">Ajout du lieu</h3>
+            {{ form_start(formLieu) }}
             {{ form_row(formLieu.villeAjout,{attr : {class : 'FALville'}}) }}
             {{ form_row(formLieu.nom,{attr : {class : 'FALnom'}}) }}
             {{ form_row(formLieu.rue,{attr : {class : 'FALrue'}}) }}
             {{ form_row(formLieu.latitude,{attr : {class : 'FALlat'}}) }}
             {{ form_row(formLieu.longitude,{attr : {class : 'FALlong'}}) }}
-        {{ form_end(formLieu) }}
-        <button id="smt-ajouter-lieu">Ajouter le lieu</button>
-        <button id="fermer_ajout">Fermer</button>
+            {{ form_end(formLieu) }}
+            <button class="btn" id="smt-ajouter-lieu">Ajouter le lieu</button>
+            <button class="btn" id="fermer_ajout">Fermer</button>
+            </div>
+        </div>
     </div>
 
 {% endblock %}

@@ -3,14 +3,23 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h2>Renseigner les informations du participant à ajouter :</h2>
+<div class="d-flex justify-content-center">
+    <div class="d-flex flex-column flex-lg-row myColor m-2 p-4 rounded ">
+        <div>
+            <h4 class="text-center p-2">Renseigner les informations du participant à ajouter :</h4>
 
-    {{ form_start(registrationForm) }}
-    {% do registrationForm.pseudo.setRendered() %}
-    {# TODO do set rendered "les boutons qu'on a pas besoin" #}
+            {{ form_start(registrationForm) }}
+            {% do registrationForm.pseudo.setRendered() %}
+            {% do registrationForm.Modifier.setRendered() %}
+            {% do registrationForm.Supprimer.setRendered() %}
+            {% do registrationForm.Desactiver.setRendered() %}
 
-        {{ form_widget(registrationForm) }}
+                {{ form_widget(registrationForm) }}
 
-        <button type="submit" class="btn">Ajouter</button>
-    {{ form_end(registrationForm) }}
+                <button type="submit" class="btn">Ajouter</button>
+            {{ form_end(registrationForm) }}
+
+        </div>
+    </div>
+</div>
 {% endblock %}

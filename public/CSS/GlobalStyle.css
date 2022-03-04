@@ -8,8 +8,8 @@ a {
 }
 .btn{
     background-color: #f68751;
-    border: 2px solid #F2811D;
-    color: #4f8690;
+    border: 1px solid #4f8690;
+    color: #black;
     box-shadow: 0 .125rem .25rem black;
     margin: 2px;
 }
@@ -18,8 +18,8 @@ a {
     height: 8rem;
 }
 
-.bandeau{
-
+input{
+    margin-left: 4px;
 }
 
 .imageLogo{
